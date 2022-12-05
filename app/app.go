@@ -3,6 +3,7 @@ package app
 import (
 	"fmt"
 	"github.com/ashishjuyal/banking-lib/logger"
+	"github.com/ashishjuyal/banking/service"
 	"github.com/gorilla/mux"
 	"log"
 	"net/http"
@@ -13,6 +14,9 @@ func Start() {
 	fmt.Println("It is working")
 	router := mux.NewRouter()
 
+	ah := FileHandler{service.NewFileService()}
+
+	router.HandleFunc("/upload", ah.NewImage).Methods(http.MethodPost).Name("UploadFile")
 	// starting server
 	address := os.Getenv("SERVER_ADDRESS")
 	port := os.Getenv("SERVER_PORT")
