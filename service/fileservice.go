@@ -3,8 +3,9 @@ package service
 import (
 	"fmt"
 	"github.com/ashishjuyal/banking/domain"
-	"io/ioutil"
+	"io"
 	"net/http"
+	"os"
 )
 
 type FileService interface {
@@ -24,9 +25,14 @@ func (s DefaultFileService) UploadImage(w http.ResponseWriter, r *http.Request) 
 
 	// Parse our multipart form, 10 << 20 specifies a maximum
 	// upload of 10 MB files.
-	r.ParseMultipartForm(10 << 20)
+	err := r.ParseMultipartForm(10 << 20)
+	if err != nil {
+		fmt.Println("Error parsing multipart form")
+		fmt.Println(err)
+		return
+	}
 	// FormFile returns the first file for the given key `myFile`
-	// it also returns the FileHeader so we can get the Filename,
+	// it also returns the FileHeader, so we can get the Filename,
 	// the Header and the size of the file
 	file, handler, err := r.FormFile("myFile")
 	if err != nil {
@@ -41,15 +47,15 @@ func (s DefaultFileService) UploadImage(w http.ResponseWriter, r *http.Request) 
 
 	// Create a temporary file within our temp-files directory that follows
 	// a particular naming pattern
-	tempFile, err := ioutil.TempFile("temp-files", "upload-*.png")
+	tempFile, err := os.CreateTemp("temp-files", "upload-*.png")
 	if err != nil {
 		fmt.Println(err)
 	}
 	defer tempFile.Close()
 
-	// read all of the contents of our uploaded file into a
+	// read all the contents of our uploaded file into a
 	// byte array
-	fileBytes, err := ioutil.ReadAll(file)
+	fileBytes, err := io.ReadAll(file)
 	if err != nil {
 		fmt.Println(err)
 	}
