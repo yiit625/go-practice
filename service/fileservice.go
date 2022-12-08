@@ -6,6 +6,7 @@ import (
 	"io"
 	"net/http"
 	"os"
+	"strings"
 )
 
 type FileService interface {
@@ -16,8 +17,8 @@ type DefaultFileService struct {
 	repo domain.FileRepository
 }
 
-func NewFileService() DefaultFileService {
-	return DefaultFileService{}
+func NewFileService(repository domain.FileRepository) DefaultFileService {
+	return DefaultFileService{repository}
 }
 
 func (s DefaultFileService) UploadImage(w http.ResponseWriter, r *http.Request) {
@@ -53,7 +54,14 @@ func (s DefaultFileService) UploadImage(w http.ResponseWriter, r *http.Request) 
 	}
 	defer tempFile.Close()
 
-	// read all the contents of our uploaded file into a
+	// Write to DB
+	if _, err := s.repo.SaveImage(domain.NewFile(
+		"",
+		"C:\\Users\\User\\Documents\\go-practice\\"+tempFile.Name(),
+		strings.Split(tempFile.Name(), "\\")[len(strings.Split(tempFile.Name(), "\\"))-1])); err != nil {
+		panic(err)
+	}
+
 	// byte array
 	fileBytes, err := io.ReadAll(file)
 	if err != nil {
