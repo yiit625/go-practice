@@ -11,3 +11,11 @@ type File struct {
 type FileRepository interface {
 	SaveImage(file File) (*File, *errs.AppError)
 }
+
+func NewFile(id, path string, name string) File {
+	return File{
+		Id:   id,
+		Path: path,
+		Name: name,
+	}
+}

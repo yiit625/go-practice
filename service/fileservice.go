@@ -15,8 +15,8 @@ type DefaultFileService struct {
 	repo domain.FileRepository
 }
 
-func NewFileService() DefaultFileService {
-	return DefaultFileService{}
+func NewFileService(repository domain.FileRepository) DefaultFileService {
+	return DefaultFileService{repository}
 }
 
 func (s DefaultFileService) UploadImage(w http.ResponseWriter, r *http.Request) {
@@ -46,6 +46,18 @@ func (s DefaultFileService) UploadImage(w http.ResponseWriter, r *http.Request) 
 		fmt.Println(err)
 	}
 	defer tempFile.Close()
+
+	fmt.Println(tempFile.Name())
+	fmt.Println("C:\\Users\\User\\Documents\\go-practice\\" + tempFile.Name())
+	fmt.Println(tempFile.Name())
+
+	// Write to DB
+	if _, err := s.repo.SaveImage(domain.NewFile(
+		"",
+		"C:\\Users\\User\\Documents\\go-practice\\"+tempFile.Name(),
+		tempFile.Name())); err != nil {
+		panic(err)
+	}
 
 	// read all of the contents of our uploaded file into a
 	// byte array
