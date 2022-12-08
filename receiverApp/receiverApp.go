@@ -13,6 +13,7 @@ import (
 func Start() {
 	fmt.Println("It is working")
 	router := mux.NewRouter()
+
 	ah := FileHandler{service.NewFileService()}
 
 	router.HandleFunc("/upload", ah.NewImage).Methods(http.MethodPost).Name("UploadFile")
