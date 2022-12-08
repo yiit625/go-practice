@@ -1,4 +1,4 @@
-package app
+package receiverApp
 
 import (
 	"github.com/ashishjuyal/banking/service"
