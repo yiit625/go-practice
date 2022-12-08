@@ -1,6 +1,8 @@
 package domain
 
-import "github.com/ashishjuyal/banking-lib/errs"
+import (
+	"github.com/ashishjuyal/banking-lib/errs"
+)
 
 type File struct {
 	Id   string
