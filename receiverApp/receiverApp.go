@@ -16,7 +16,7 @@ import (
 func Start() {
 	fmt.Println("It is working")
 
-	sanityCheck()
+	// sanityCheck()
 
 	router := mux.NewRouter()
 
@@ -26,10 +26,10 @@ func Start() {
 	ah := FileHandler{service.NewFileService(customerRepositoryDb)}
 	router.HandleFunc("/upload", ah.NewImage).Methods(http.MethodPost).Name("UploadFile")
 	// starting server
-	address := os.Getenv("SERVER_ADDRESS")
-	port := os.Getenv("SERVER_PORT")
-	logger.Info(fmt.Sprintf("Starting server on %s:%s ...", address, port))
-	log.Fatal(http.ListenAndServe(fmt.Sprintf("%s:%s", address, port), router))
+	address := "https://fast-plateau-46842.herokuapp.com/"
+	// port := os.Getenv("SERVER_PORT")
+	logger.Info(fmt.Sprintf("Starting server on %s ...", address))
+	log.Fatal(http.ListenAndServe(fmt.Sprintf("%s", address), router))
 }
 
 func getDbClient() *sqlx.DB {
