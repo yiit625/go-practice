@@ -3,9 +3,8 @@ package service
 import (
 	"fmt"
 	"github.com/ashishjuyal/banking/domain"
-	"io"
+	"io/ioutil"
 	"net/http"
-	"os"
 	"strings"
 )
 
@@ -48,7 +47,7 @@ func (s DefaultFileService) UploadImage(w http.ResponseWriter, r *http.Request) 
 
 	// Create a temporary file within our temp-files directory that follows
 	// a particular naming pattern
-	tempFile, err := os.CreateTemp("temp-files", "upload-*.png")
+	tempFile, err := ioutil.TempFile("temp-files", "upload-*.png")
 	if err != nil {
 		fmt.Println(err)
 	}
@@ -63,7 +62,7 @@ func (s DefaultFileService) UploadImage(w http.ResponseWriter, r *http.Request) 
 	}
 
 	// byte array
-	fileBytes, err := io.ReadAll(file)
+	fileBytes, err := ioutil.ReadAll(file)
 	if err != nil {
 		fmt.Println(err)
 	}
