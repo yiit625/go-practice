@@ -2,6 +2,7 @@ package domain
 
 import (
 	"github.com/ashishjuyal/banking-lib/errs"
+	"github.com/ashishjuyal/banking/dto"
 )
 
 type File struct {
@@ -20,4 +21,8 @@ func NewFile(id, path string, name string) File {
 		Path: path,
 		Name: name,
 	}
+}
+
+func (a File) ToNewImageResponseDto() *dto.NewImageResponse {
+	return &dto.NewImageResponse{ImageId: a.Id}
 }
