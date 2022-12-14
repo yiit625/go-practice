@@ -24,17 +24,12 @@ func Start() {
 	dbClient := getDbClient()
 	customerRepositoryDb := domain.NewFileRepositoryDb(dbClient)
 	ah := FileHandler{service.NewFileService(customerRepositoryDb)}
-	router.HandleFunc("/upload", ah.NewImage).Methods(http.MethodPost).Name("UploadFile")
+	router.HandleFunc("/upload", ah.NewImage).Methods(http.MethodPost).Name("UploadImageFile")
 	// starting server
 	address := os.Getenv("SERVER_ADDRESS")
 	port := os.Getenv("SERVER_PORT")
 	logger.Info(fmt.Sprintf("Starting server on %s:%s ...", address, port))
 	log.Fatal(http.ListenAndServe(fmt.Sprintf("%s:%s", address, port), router))
-
-	// For Server
-	/* port := os.Getenv("PORT")
-	logger.Info(fmt.Sprintf("Starting server on %s ...", port))
-	log.Fatal(http.ListenAndServe(":"+port, nil), router) */
 }
 
 func getDbClient() *sqlx.DB {

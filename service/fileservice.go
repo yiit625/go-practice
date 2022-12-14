@@ -76,8 +76,14 @@ func WriteImage(w http.ResponseWriter, r *http.Request) string {
 		fmt.Println(err)
 	}
 	// write this byte array to our temporary file
-	tempFile.Write(fileBytes)
+	_, err = tempFile.Write(fileBytes)
+	if err != nil {
+		return ""
+	}
 	// return that we have successfully uploaded our file!
-	fmt.Fprintf(w, "Successfully Uploaded File\n")
+	_, err = fmt.Fprintf(w, "Successfully Uploaded File\n")
+	if err != nil {
+		return ""
+	}
 	return tempFile.Name()
 }
