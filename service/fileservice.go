@@ -12,7 +12,7 @@ import (
 )
 
 type FileService interface {
-	UploadImage(tempFileName string) (*dto.NewImageResponse, *errs.AppError)
+	UploadDocument(tempFileName string) (*dto.NewImageResponse, *errs.AppError)
 }
 
 type DefaultFileService struct {
@@ -23,7 +23,7 @@ func NewFileService(repository domain.FileRepository) DefaultFileService {
 	return DefaultFileService{repository}
 }
 
-func (s DefaultFileService) UploadImage(tempFileName string) (*dto.NewImageResponse, *errs.AppError) {
+func (s DefaultFileService) UploadDocument(tempFileName string) (*dto.NewImageResponse, *errs.AppError) {
 	if tempFileName == "" || tempFileName == " " {
 		return nil, errs.NewNotFoundError("File Path can not found!")
 	}
@@ -64,7 +64,8 @@ func WriteImage(w http.ResponseWriter, r *http.Request) string {
 
 	// Create a temporary file within our temp-files directory that follows
 	// a particular naming pattern
-	tempFile, err := os.CreateTemp("temp-files", "upload-*.png")
+	tempFile, err := os.CreateTemp("temp-files", "upload-*."+
+		(strings.Split(handler.Filename, ".")[len(strings.Split(handler.Filename, "."))-1]))
 	if err != nil {
 		fmt.Println(err)
 	}

@@ -11,7 +11,7 @@ type FileHandler struct {
 }
 
 func (h FileHandler) NewImage(w http.ResponseWriter, r *http.Request) {
-	fileId, appError := h.service.UploadImage(service.WriteImage(w, r))
+	fileId, appError := h.service.UploadDocument(service.WriteImage(w, r))
 	if appError != nil {
 		writeResponse(w, appError.Code, appError.AsMessage())
 	} else {
